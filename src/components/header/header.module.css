@@ -1,0 +1,21 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #122D4D80;
+    height: 3.125rem;
+    border-bottom: 1px solid #ffffffb4;
+    padding: 0 50px;
+}
+
+header a {
+    text-decoration: none;
+    color: white;
+    padding:  0 15px;
+    font-weight: 700;
+}
+
+.linkActive{
+    font-size: 24px;
+}

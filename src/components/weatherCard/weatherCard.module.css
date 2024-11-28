@@ -1,0 +1,63 @@
+.container {
+    width: 33%;
+    min-width: 510px;
+    padding: 15px;
+    background-color: #122D4D80;
+    border-radius: 25px;
+    box-sizing: border-box;
+    backdrop-filter: blur(7px);
+}
+
+.buttonBox {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.buttonBox button {
+    padding: 10px 20px;
+    font-size: 1.25rem;
+    background: none;
+    border: 1px solid #ffffffab;
+    border-radius: 20px;
+}
+
+.topCardPart {
+    display: flex;
+    flex-direction: row;
+    padding: 0 25px;
+    gap: 35px;
+    overflow: hidden;
+}
+
+.leftBox {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.temperature {
+    font-size: 3rem;
+}
+
+.city {
+    font-size: 1.6rem;
+}
+
+.weatherIconsWrapper {
+    width: 75%;
+}
+
+.weatherIconsWrapper img {
+    width: 33%;
+}
+
+.buttonBox {
+    padding: 10px 0;
+}
+
+.buttonBox button:hover {
+    cursor: pointer;
+    outline: 1px solid #fff;
+}

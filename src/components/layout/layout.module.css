@@ -1,0 +1,6 @@
+.container {
+    width: 100%;
+    height: 100lvh;
+    overflow-y: hidden;
+    background-image: url('../../assets/pic2.png');
+}
