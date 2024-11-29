@@ -9,6 +9,13 @@ import {
 } from "../../types/types";
 import { useWeather } from "../context/WeatherContext";
 import ErrorResponse from "../errorResponse/ErrorResponse";
+import * as Yup from "yup";
+
+const schema = Yup.object().shape({
+  city: Yup.string().required(
+    "This field is required. Please enter city name."
+  ),
+});
 
 const API_ID = "82cf77ffe1306280ae53958c18d2fb66";
 
@@ -18,6 +25,7 @@ export default function Home() {
   const [isBadRequest, setRequestStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const fetchWeather = async (city: string) => {
+    setRequestStatus(false);
     const res = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_ID}`
     );
@@ -36,13 +44,10 @@ export default function Home() {
       city: "",
     } as IFormValues,
     validateOnChange: false,
+    validationSchema: schema,
     onSubmit(values: IFormValues, { resetForm }) {
-      if (values.city) {
-        fetchWeather(values.city);
-        resetForm();
-      } else {
-        alert("Field can't be empty. Please enter name of city.");
-      }
+      fetchWeather(values.city);
+      resetForm();
     },
   });
   const clearCurrentWeatherData = () => {
@@ -58,11 +63,6 @@ export default function Home() {
           onChange={formic.handleChange}
           value={formic.values.city}
         />
-        {formic.errors.city ? (
-          <div className={style.error}>{formic.errors.city}</div>
-        ) : (
-          ""
-        )}
         <button type="submit">Submit</button>
       </form>
       <div className={style.resultContainer}>
@@ -78,6 +78,9 @@ export default function Home() {
           />
         )}
         {isBadRequest && <ErrorResponse errorText={errorMessage} />}
+        {formic.errors.city && (
+          <ErrorResponse errorText={String(formic.errors.city)} />
+        )}
       </div>
     </div>
   );
