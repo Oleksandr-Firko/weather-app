@@ -50,3 +50,15 @@ export interface IWeatherDataContext {
   addToHistory: (data: IWeatherData) => void;
   clearHistory: () => void;
 }
+export interface IErrorServerResponse {
+  cod: number;
+  message: string;
+}
+
+export interface IErrorPageProps {
+  errorText: string;
+}
+
+export interface IFormValues {
+  city: string;
+}

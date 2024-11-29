@@ -2,24 +2,33 @@ import style from "./Home.module.css";
 import { useFormik } from "formik";
 import { useState } from "react";
 import WeatherCard from "../weatherCard/WeatherCard";
-import { IWeatherData } from "../../types/types";
+import {
+  IWeatherData,
+  IFormValues,
+  IErrorServerResponse,
+} from "../../types/types";
 import { useWeather } from "../context/WeatherContext";
-
-interface IFormValues {
-  city: string;
-}
+import ErrorResponse from "../errorResponse/ErrorResponse";
 
 const API_ID = "82cf77ffe1306280ae53958c18d2fb66";
 
 export default function Home() {
   const { addToHistory } = useWeather();
   const [weather, setWeather] = useState<IWeatherData>();
+  const [isBadRequest, setRequestStatus] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const fetchWeather = async (city: string) => {
     const res = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_ID}`
     );
-    const data: IWeatherData = await res.json();
-    setWeather(data);
+    if (res.ok) {
+      const data: IWeatherData = await res.json();
+      setWeather(data);
+    } else {
+      const data: IErrorServerResponse = await res.json();
+      setErrorMessage(data.message);
+      setRequestStatus(true);
+    }
   };
 
   const formic = useFormik({
@@ -28,8 +37,12 @@ export default function Home() {
     } as IFormValues,
     validateOnChange: false,
     onSubmit(values: IFormValues, { resetForm }) {
-      fetchWeather(values.city);
-      resetForm();
+      if (values.city) {
+        fetchWeather(values.city);
+        resetForm();
+      } else {
+        alert("Field can't be empty. Please enter name of city.");
+      }
     },
   });
   const clearCurrentWeatherData = () => {
@@ -53,7 +66,7 @@ export default function Home() {
         <button type="submit">Submit</button>
       </form>
       <div className={style.resultContainer}>
-        {weather ? (
+        {weather && (
           <WeatherCard
             cityName={weather.name}
             temperature={weather.main.temp}
@@ -63,9 +76,8 @@ export default function Home() {
             }}
             deleteWeather={clearCurrentWeatherData}
           />
-        ) : (
-          ""
         )}
+        {isBadRequest && <ErrorResponse errorText={errorMessage} />}
       </div>
     </div>
   );
